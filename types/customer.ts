@@ -22,6 +22,8 @@ export interface Customer {
 
 
 export interface Equipment {
+  serialNumber: string;
+  name: string;
   id: string;
   customerId: string;
   userId: string;

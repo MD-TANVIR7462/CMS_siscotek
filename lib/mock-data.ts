@@ -134,5 +134,7 @@ export const mockEquipment: Equipment[] = [
     notes: 'TV ID : 1558924359\nServer RDP: 103.195.140.198:7034\nUser name : Administrator\nPass : 0189ocsi5',
     createdAt: new Date('2024-01-15'),
     updatedAt: new Date('2024-01-15'),
+    serialNumber: '',
+    name: 'werwer'
   },
 ];

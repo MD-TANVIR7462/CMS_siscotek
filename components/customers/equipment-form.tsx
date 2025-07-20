@@ -60,6 +60,8 @@ export function EquipmentForm({
         ...formData,
         createdAt: new Date(),
         updatedAt: new Date(),
+        userId: '',
+        equipmentName: ''
       };
       onEquipmentUpdate([...equipment, newEquipment]);
     }
