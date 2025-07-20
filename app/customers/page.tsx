@@ -5,8 +5,9 @@ import { Sidebar } from '@/components/sidebar';
 import { CustomerTable } from '@/components/customers/customer-table';
 import { CustomerModal } from '@/components/customers/customer-modal';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { Customer } from '@/types/customer';
 import { mockCustomers } from '@/lib/mock-data';
 
@@ -14,9 +15,30 @@ export default function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>(mockCustomers);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [activeSearchTerm, setActiveSearchTerm] = useState('');
+  const [inactiveSearchTerm, setInactiveSearchTerm] = useState('');
 
-  const activeCustomers = customers.filter(customer => customer.active);
-  const inactiveCustomers = customers.filter(customer => !customer.active);
+  const filterCustomers = (customerList: Customer[], searchTerm: string) => {
+    if (!searchTerm) return customerList;
+    
+    return customerList.filter(customer =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.emails.some(email => email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      customer.telephone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      customer.state.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  const activeCustomers = filterCustomers(
+    customers.filter(customer => customer.active),
+    activeSearchTerm
+  );
+  const inactiveCustomers = filterCustomers(
+    customers.filter(customer => !customer.active),
+    inactiveSearchTerm
+  );
 
   const handleAddCustomer = (customerData: Omit<Customer, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newCustomer: Customer = {
@@ -81,14 +103,23 @@ export default function CustomersPage() {
           <Tabs defaultValue="active" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2">
               <TabsTrigger value="active">
-                Active ({activeCustomers.length})
+                Active ({customers.filter(c => c.active).length})
               </TabsTrigger>
               <TabsTrigger value="inactive">
-                Inactive ({inactiveCustomers.length})
+                Inactive ({customers.filter(c => !c.active).length})
               </TabsTrigger>
             </TabsList>
             
             <TabsContent value="active" className="space-y-4">
+              <div className="relative max-w-md mx-auto ">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground " />
+                <Input
+                  placeholder="Search active customers..."
+                  value={activeSearchTerm}
+                  onChange={(e) => setActiveSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
               <CustomerTable 
                 customers={activeCustomers}
                 onEdit={openEditModal}
@@ -97,6 +128,15 @@ export default function CustomersPage() {
             </TabsContent>
             
             <TabsContent value="inactive" className="space-y-4">
+              <div className="relative max-w-md mx-auto">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search inactive customers..."
+                  value={inactiveSearchTerm}
+                  onChange={(e) => setInactiveSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
               <CustomerTable 
                 customers={inactiveCustomers}
                 onEdit={openEditModal}
