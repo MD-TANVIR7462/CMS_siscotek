@@ -378,6 +378,7 @@ import { Customer, Equipment, CustomerUser } from "@/types/customer";
 import { mockCustomers, mockEquipment, mockCustomerUsers } from "@/lib/mock-data";
 import { UserSidebar } from "@/components/customers/user-sidebar";
 import { EquipmentFormDetailed } from "@/components/customers/equipment-form-detailed";
+import { EquipmentManagement } from "@/components/customers/EquipmentManagement";
 
 export default function CustomerDetailPage() {
   const params = useParams();
@@ -427,7 +428,7 @@ export default function CustomerDetailPage() {
   const equipmentTypes = [
     { key: "computer", label: "Computer" },
     { key: "software", label: "Software" },
-    { key: "printer", label: "Printer/Scanner/Copier" },
+    { key: "printer", label: "Printer/Scanner" },
     { key: "router", label: "Router" },
     { key: "switch", label: "Switch" },
     { key: "modem", label: "Modem" },
@@ -633,7 +634,7 @@ export default function CustomerDetailPage() {
                             <CardTitle>Equipment for {selectedUser?.name}</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <Tabs defaultValue="computer" className="w-full">
+                            {/* <Tabs defaultValue="computer" className="w-full">
                               <TabsList className="grid grid-cols-4 lg:grid-cols-8 mb-6">
                                 {equipmentTypes.map((type) => (
                                   <TabsTrigger key={type.key} value={type.key} className="text-xs px-2 py-2">
@@ -651,9 +652,15 @@ export default function CustomerDetailPage() {
                                     equipment={equipment}
                                     onEquipmentUpdate={setEquipment}
                                   />
+                     
                                 </TabsContent>
                               ))}
-                            </Tabs>
+                            </Tabs> */}
+                            <EquipmentManagement
+                              userId={selectedUserId}
+                              customerId={customerId}
+                              initialEquipment={equipment}
+                            />
                           </CardContent>
                         </Card>
                       ) : (
