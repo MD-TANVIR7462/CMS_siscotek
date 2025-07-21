@@ -499,18 +499,18 @@ export default function CustomerDetailPage() {
           <Tabs defaultValue="customerInfo">
             <TabsList className="grid grid-cols-2 max-w-md">
               <TabsTrigger value="customerInfo">Customer Info</TabsTrigger>
-              <TabsTrigger value="userDetails">Details</TabsTrigger>
+              <TabsTrigger value="userDetails"> Management</TabsTrigger>
             </TabsList>
             <TabsContent value="customerInfo">
               {/* Customer Information Card */}
               <Card className="mb-8">
                 <CardHeader className="flex">
-                <span className="flex justify-end">
-                  {" "}
-                  <Badge variant={customer.active ? "default" : "secondary"} className="text-sm">
-                    {customer.active ? "Active" : "Inactive"}
-                  </Badge>
-                </span>
+                  <span className="flex justify-end">
+                    {" "}
+                    <Badge variant={customer.active ? "default" : "secondary"} className="text-sm">
+                      {customer.active ? "Active" : "Inactive"}
+                    </Badge>
+                  </span>
                   <CardTitle>Customer Information</CardTitle>
                 </CardHeader>
 
