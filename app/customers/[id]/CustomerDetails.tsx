@@ -499,7 +499,7 @@ export default function CustomerDetailPage() {
           <Tabs defaultValue="customerInfo">
             <TabsList className="grid grid-cols-2 max-w-md">
               <TabsTrigger value="customerInfo">Customer Info</TabsTrigger>
-              <TabsTrigger value="userDetails"> Management</TabsTrigger>
+              <TabsTrigger value="management"> Management</TabsTrigger>
             </TabsList>
             <TabsContent value="customerInfo">
               {/* Customer Information Card */}
@@ -594,7 +594,7 @@ export default function CustomerDetailPage() {
                 </CardContent>
               </Card>
             </TabsContent>
-            <TabsContent value="userDetails">
+            <TabsContent value="management">
               {/* Main Tabs Section */}
               <Tabs defaultValue="equipment" className="w-full">
                 <TabsList className="grid grid-cols-7 mb-8 h-auto p-1">

@@ -29,14 +29,14 @@ export function UserSidebar({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<CustomerUser | null>(null);
 
-//   const getIcon = (userName: string) => {
-//     const name = userName.toLowerCase();
-//     if (name.includes("server")) return Server;
-//     if (name.includes("camera") || name.includes("xvr") || name.includes("dahua")) return Camera;
-//     if (name.includes("laptop")) return Laptop;
-//     if (name.includes("pc") || name.includes("computer")) return Monitor;
-//     return User;
-//   };
+  //   const getIcon = (userName: string) => {
+  //     const name = userName.toLowerCase();
+  //     if (name.includes("server")) return Server;
+  //     if (name.includes("camera") || name.includes("xvr") || name.includes("dahua")) return Camera;
+  //     if (name.includes("laptop")) return Laptop;
+  //     if (name.includes("pc") || name.includes("computer")) return Monitor;
+  //     return User;
+  //   };
 
   const handleAddUser = (userData: Omit<CustomerUser, "id" | "createdAt" | "updatedAt">) => {
     onUserAdd(userData);
@@ -66,8 +66,8 @@ export function UserSidebar({
       <Card className="h-fit border">
         <CardContent className="p-2">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="font-medium text-xs text-gray-600 uppercase tracking-wider">Users & Devices</h3>
-            <Button onClick={() => setIsModalOpen(true)} className="h-6 px-2 text-xs bg-green-600 hover:bg-green-700">
+            <h3 className="font-medium text-xs  uppercase tracking-wider">Users & Devices</h3>
+            <Button onClick={() => setIsModalOpen(true)} className="h-6 px-2 text-xs ">
               <Plus className="h-3 w-3 mr-1" />
               Add
             </Button>
@@ -82,13 +82,13 @@ export function UserSidebar({
                 <div
                   key={user.id}
                   className={`group relative p-2 rounded-md border cursor-pointer transition-all ${
-                    isSelected ? "bg-blue-50 border-blue-200" : "bg-white border-gray-200 hover:bg-gray-50"
+                    isSelected ? "bg-gray-100/80 border-gray-400/70 dark:bg-black dark:border-white" : " hover:bg-gray-50 dark:hover:bg-black"
                   }`}
                   onClick={() => onUserSelect(user.id)}
                 >
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <IconComponent className={`h-3 w-3 ${isSelected ? "text-blue-600" : "text-gray-500"}`} />
+                      <IconComponent className={`h-3 w-3 `} />
                       <span
                         className={`absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full border border-white ${
                           user.active ? "bg-green-500" : "bg-red-500"
@@ -96,9 +96,7 @@ export function UserSidebar({
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-xs font-medium truncate ${isSelected ? "text-blue-900" : "text-gray-900"}`}>
-                        {user.name}
-                      </p>
+                      <p className={`text-xs font-medium truncate `}>{user.name}</p>
                       {user.department && <p className="text-[0.65rem] text-gray-500 truncate">{user.department}</p>}
                     </div>
                     <Button
