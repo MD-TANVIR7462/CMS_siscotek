@@ -140,7 +140,7 @@ export function EquipmentList({
         <div className="flex items-center gap-3">
           <span className="text-xl">{getEquipmentIcon()}</span>
           <h2 className="text-xl font-bold">{getEquipmentTypeLabel()}</h2>
-          <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+          <span className="text-sm  px-2 py-1 rounded-full">
             {filteredEquipment.length} items
           </span>
         </div>
@@ -152,7 +152,7 @@ export function EquipmentList({
 
       {/* Search */}
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2  w-4 h-4" />
         <Input
           placeholder={`Search ${getEquipmentTypeLabel().toLowerCase()}...`}
           value={searchTerm}
@@ -168,7 +168,7 @@ export function EquipmentList({
           <h3 className="text-lg font-medium  mb-2">
             No {getEquipmentTypeLabel().toLowerCase()} found
           </h3>
-          <p className="text-gray-500 mb-4">
+          <p className=" mb-4">
             {searchTerm 
               ? `No equipment matches "${searchTerm}"`
               : `Get started by adding your first ${equipmentType}`

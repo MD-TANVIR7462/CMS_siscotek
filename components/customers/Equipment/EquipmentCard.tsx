@@ -50,7 +50,7 @@ export function EquipmentCard({
   };
 
   return (
-    <Card className="h-full border border-gray-200 rounded-xl shadow-xs hover:shadow-sm transition duration-300 bg-white dark:bg-gray-900">
+    <Card className="h-full border border-gray-200 dark:border-gray-800 rounded-xl shadow-xs hover:shadow-sm transition duration-300 bg-white dark:bg-gray-950/30">
       <CardHeader className="pb-2 border-b border-gray-100 dark:border-gray-800">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -122,7 +122,7 @@ export function EquipmentCard({
           <Button
             size="sm"
             variant="outline"
-            className="h-8 text-red-600 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900"
+            className="h-8 text-red-600 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-400/30"
             onClick={() => onDelete(equipment.id)}
           >
             <Trash2 className="w-4 h-4" />

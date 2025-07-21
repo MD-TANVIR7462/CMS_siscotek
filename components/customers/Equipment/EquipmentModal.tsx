@@ -41,9 +41,9 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
   const DetailRow = ({ label, value }: { label: string; value?: string | null }) => {
     if (!value) return null;
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 py-2 border-b border-gray-100">
-        <span className="font-medium text-gray-700">{label}:</span>
-        <span className="md:col-span-2 text-gray-900 break-words">{value}</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 py-2 border-b dark:border-gray-400 border-gray-100">
+        <span className="font-medium ">{label}:</span>
+        <span className="md:col-span-2  break-words">{value}</span>
       </div>
     );
   };
@@ -55,7 +55,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
           <div className="flex items-center gap-3">
             <span className="text-3xl">{getEquipmentIcon()}</span>
             <div>
-              <DialogTitle className="text-xl font-bold text-gray-900">{equipment.equipmentName}</DialogTitle>
+              <DialogTitle className="text-xl font-bold ">{equipment.equipmentName}</DialogTitle>
               <Badge variant="secondary" className="capitalize mt-1">
                 {equipment.type}
               </Badge>
@@ -66,7 +66,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
         <div className="space-y-6 mt-6">
           {/* Basic Information */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Basic Information</h3>
+            <h3 className="text-lg font-semibold  mb-3">Basic Information</h3>
             <div className="space-y-1">
               <DetailRow label="Equipment Name" value={equipment.equipmentName} />
               <DetailRow label="Type" value={equipment.equipmentType} />
@@ -79,7 +79,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
           {/* Technical Specifications (for computers) */}
           {equipment.type === "computer" && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Technical Specifications</h3>
+              <h3 className="text-lg font-semibold  mb-3">Technical Specifications</h3>
               <div className="space-y-1">
                 <DetailRow label="Processor" value={equipment.processor} />
                 <DetailRow label="Speed" value={equipment.speed} />
@@ -96,7 +96,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
           {/* Software Information */}
           {(equipment.type === "computer" || equipment.type === "software") && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Software Information</h3>
+              <h3 className="text-lg font-semibold  mb-3">Software Information</h3>
               <div className="space-y-1">
                 <DetailRow label="Antivirus" value={equipment.antivirus} />
                 <DetailRow label="Antivirus Product Key" value={equipment.antivirusProductKey} />
@@ -108,7 +108,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
 
           {/* Purchase Information */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Purchase Information</h3>
+            <h3 className="text-lg font-semibold  mb-3">Purchase Information</h3>
             <div className="space-y-1">
               <DetailRow label="Vendor" value={equipment.vendor} />
               <DetailRow label="Purchase Date" value={equipment.purchaseDate} />
@@ -120,7 +120,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
           {/* Notes */}
           {equipment.notes && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Notes</h3>
+              <h3 className="text-lg font-semibold  mb-3">Notes</h3>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <p className="text-gray-700 whitespace-pre-wrap">{equipment.notes}</p>
               </div>
@@ -129,7 +129,7 @@ export function EquipmentModal({ equipment, isOpen, onClose }: EquipmentModalPro
 
           {/* Timestamps */}
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Record Information</h3>
+            <h3 className="text-lg font-semibold  mb-3">Record Information</h3>
             <div className="space-y-1">
               <DetailRow label="Created" value={formatDate(equipment.createdAt)} />
               <DetailRow label="Last Updated" value={formatDate(equipment.updatedAt)} />
