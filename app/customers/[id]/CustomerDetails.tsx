@@ -173,7 +173,7 @@ export default function CustomerDetailPage() {
   // Widget Components
   const CalendarWidget = () =>
     widgetVisibility.calendar && (
-      <div className="mt-6 ">
+      <div className="mt-6 w-full ">
         <div className="flex flex-row items-center justify-between space-y-0 pb-2">
           <div className="text-sm font-medium flex items-center gap-2">
             <CalendarIcon className="h-4 w-4" />
@@ -188,7 +188,7 @@ export default function CustomerDetailPage() {
           mode="single"
           selected={selectedDate}
           onSelect={setSelectedDate}
-          className="rounded-md border shadow-sm"
+          className="rounded-md border shadow-sm w-full"
           captionLayout="dropdown"
         />
       </div>
@@ -226,8 +226,6 @@ export default function CustomerDetailPage() {
             <span className="text-xs text-muted-foreground">Monthly Revenue</span>
             <span className="text-sm font-medium text-green-600">$2,450</span>
           </div>
-
-
         </CardContent>
       </Card>
     );
@@ -272,7 +270,9 @@ export default function CustomerDetailPage() {
       <Sidebar />
 
       {/* Main Content */}
-      <main className={`flex-1 lg:ml-64 p-3 transition-all duration-300 ${isWidgetSectionVisible ? "lg:pr-[304px]" : ""}`}>
+      <main
+        className={`flex-1 lg:ml-64 p-3 transition-all duration-300 ${isWidgetSectionVisible ? "lg:pr-[304px]" : ""}`}
+      >
         <div className="mx-auto">
           <div className="mb-6 mt-12 lg:mt-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -551,10 +551,10 @@ export default function CustomerDetailPage() {
       )}
 
       {/* Mobile Widget Button */}
-      <Button className="lg:hidden fixed bottom-4 right-4 z-50 rounded-full h-12 w-12" onClick={toggleWidgetSection}>
-        <Settings className="h-5 w-5" />
-      </Button>
 
+      <button className="lg:hidden fixed bottom-4 right-4 z-50 rounded-full h-8 w-8  " onClick={toggleWidgetSection}>
+        {isWidgetSectionVisible ? <PanelRightClose className="h-5 w-5" /> : <PanelRightOpen className="h-4 w-4" />}
+      </button>
       {/* Mobile Widget Overlay */}
       {isWidgetSectionVisible && (
         <div className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40">
