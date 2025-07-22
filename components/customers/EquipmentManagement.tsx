@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent } from "@/components/ui/card";
 
 import { Equipment } from "@/types/customer";
 import { EquipmentManager } from "./Equipment";
@@ -29,21 +28,21 @@ export function EquipmentManagement({ userId, customerId, initialEquipment = [] 
 
   return (
     <div className="space-y-6">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-8 rounded-none border-b">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full ">
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-8 lg:grid-cols-6  2xl:grid-cols-8 gap-2  h-auto overflow-x-auto">
           {equipmentTabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
               className="flex items-center gap-2 "
             >
-              <span className="text-sm">{tab.label}</span>
+              <span className=" text-xs font-medium ">{tab.label}</span>
             </TabsTrigger>
           ))}
         </TabsList>
 
         {equipmentTabs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value} className="p-6 mt-0">
+          <TabsContent key={tab.value} value={tab.value} className=" mt-0">
             <EquipmentManager
               equipmentType={tab.value as Equipment["type"]}
               userId={userId}

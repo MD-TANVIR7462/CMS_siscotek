@@ -9,7 +9,6 @@ import { EquipmentForm } from './EquipmentForm';
 import { EquipmentCard } from './EquipmentCard';
 import { EquipmentModal } from './EquipmentModal';
 
-
 interface EquipmentListProps {
   equipmentType: Equipment['type'];
   userId: string;
@@ -30,12 +29,11 @@ export function EquipmentList({
   const [viewingEquipment, setViewingEquipment] = useState<Equipment | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter equipment by type and search term
-  const filteredEquipment = equipment.filter(item => 
+  const filteredEquipment = equipment.filter(item =>
     item.type === equipmentType &&
     (item.equipmentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     item?.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     item?.model?.toLowerCase().includes(searchTerm.toLowerCase()))
+      item?.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item?.model?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const handleAddNew = () => {
@@ -60,18 +58,12 @@ export function EquipmentList({
   };
 
   const handleSave = (equipmentData: Equipment) => {
-    let updatedEquipment;
-    
-    if (editingEquipment) {
-      // Update existing equipment
-      updatedEquipment = equipment.map(item =>
-        item.id === editingEquipment.id ? equipmentData : item
-      );
-    } else {
-      // Add new equipment
-      updatedEquipment = [...equipment, equipmentData];
-    }
-    
+    const updatedEquipment = editingEquipment
+      ? equipment.map(item =>
+          item.id === editingEquipment.id ? equipmentData : item
+        )
+      : [...equipment, equipmentData];
+
     onEquipmentUpdate(updatedEquipment);
     setShowForm(false);
     setEditingEquipment(null);
@@ -134,25 +126,25 @@ export function EquipmentList({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 lg:gap-4">
+        <div className="flex items-center gap-2">
           <span className="text-xl">{getEquipmentIcon()}</span>
           <h2 className="text-xl font-bold">{getEquipmentTypeLabel()}</h2>
-          <span className="text-sm  px-2 py-1 rounded-full">
+          <span className="text-sm px-2 py-1 rounded-full bg-muted">
             {filteredEquipment.length} items
           </span>
         </div>
-        <Button onClick={handleAddNew} className="">
+        <Button onClick={handleAddNew}>
           <Plus className="w-4 h-4 mr-2" />
           Add New {getEquipmentTypeLabel().slice(0, -1)}
         </Button>
       </div>
 
       {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2  w-4 h-4" />
+      <div className="relative w-full max-w-md">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder={`Search ${getEquipmentTypeLabel().toLowerCase()}...`}
           value={searchTerm}
@@ -165,14 +157,13 @@ export function EquipmentList({
       {filteredEquipment.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-4xl mb-4">{getEquipmentIcon()}</div>
-          <h3 className="text-lg font-medium  mb-2">
+          <h3 className="text-lg font-medium mb-2">
             No {getEquipmentTypeLabel().toLowerCase()} found
           </h3>
-          <p className=" mb-4">
-            {searchTerm 
+          <p className="mb-4">
+            {searchTerm
               ? `No equipment matches "${searchTerm}"`
-              : `Get started by adding your first ${equipmentType}`
-            }
+              : `Get started by adding your first ${equipmentType}`}
           </p>
           {!searchTerm && (
             <Button onClick={handleAddNew}>
@@ -182,7 +173,7 @@ export function EquipmentList({
           )}
         </div>
       ) : (
-        <div className=" max-h-[calc(100vh-300px)] overflow-y-auto pr-2 grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-1">
           {filteredEquipment.map((item) => (
             <EquipmentCard
               key={item.id}
