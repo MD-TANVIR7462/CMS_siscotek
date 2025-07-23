@@ -26,24 +26,17 @@ import {
   DollarSign,
   Files,
   X,
-  ChevronLeft,
-  ChevronRight,
   Eye,
   EyeOff,
   Calendar as CalendarIcon,
-  TrendingUp,
-  Clock,
-  AlertCircle,
   User,
   Settings,
   BarChart3,
-  Activity,
   PanelRightClose,
   PanelRightOpen,
 } from "lucide-react";
 import { Customer, Equipment, CustomerUser } from "@/types/customer";
 import { mockCustomers, mockEquipment, mockCustomerUsers } from "@/lib/mock-data";
-import { EquipmentFormDetailed } from "@/components/customers/equipment-form-detailed";
 import { EquipmentManagement } from "@/components/customers/EquipmentManagement";
 
 interface WidgetVisibility {
