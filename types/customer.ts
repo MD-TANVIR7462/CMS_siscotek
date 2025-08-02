@@ -19,8 +19,7 @@
 //   updatedAt: Date;
 // }
 
-export type Customer = {
-  id(id: any): void; // this is backend data type comes form the DB+backend
+export type Customer = { // this is backend data type comes form the DB+backend
   _id: string;
   name: string;
   address: string;
@@ -36,11 +35,28 @@ export type Customer = {
   taxId?: string;
   other?: string;
   note?: string;
-  isActive?: boolean;
+  isActive: boolean;
   isDeleted?: boolean;
   createdAt: string; // or Date if you plan to parse it as a Date
   updatedAt: string; // or Date
   __v?: number;
+};
+export type AddCustomer = { 
+  name: string;
+  address: string;
+  suiteFloor?: string;
+  city: string;
+  state: string;
+  zip: string;
+  telephone: string;
+  fax?: string;
+  mapUrl?: string;
+  email: string[];
+  websiteLink?: string;
+  taxId?: string;
+  other?: string;
+  note?: string;
+  isActive?: boolean;
 };
 
 export interface Equipment {

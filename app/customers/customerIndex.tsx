@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search } from "lucide-react";
-import { Customer } from "@/types/customer";
+import { AddCustomer, Customer } from "@/types/customer";
 
 const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
   console.log(customerData);
@@ -41,15 +41,12 @@ const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
     inactiveSearchTerm
   );
 
-  const handleAddCustomer = (customerData: Omit<Customer, "id" | "createdAt" | "updatedAt">) => {
-    // const newCustomer: Customer = {
-    //   ...customerData,
-    //   id: Date.now().toString(),
-    //   createdAt: new Date(),
-    //   updatedAt: new Date(),
-    // };
+  const handleAddCustomer = (customerData: AddCustomer) => {
+    const newCustomer: AddCustomer = {
+      ...customerData,
+    };
 
-    // console.log(newCustomer);
+    console.log(newCustomer);
     // setCustomers([...customers, newCustomer]);
     setIsModalOpen(false);
   };

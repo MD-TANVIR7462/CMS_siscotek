@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Customer } from '@/types/customer';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+import React, { useState, useEffect } from "react";
+import { AddCustomer, Customer } from "@/types/customer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -14,33 +14,33 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Plus, X } from 'lucide-react';
+} from "@/components/ui/dialog";
+import { Plus, X } from "lucide-react";
 
 interface CustomerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (customer: Omit<Customer, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  onSubmit: (customer: AddCustomer) => void;
   customer?: Customer | null;
 }
 
 export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerModalProps) {
   const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    suite: '',
-    city: '',
-    state: '',
-    zip: '',
-    telephone: '',
-    fax: '',
-    mapUrl: '',
-    emails: [''],
-    website: '',
-    others: '',
-    taxId: '',
-    notes: '',
-    active: true,
+    name: "",
+    address: "",
+    suiteFloor: "",
+    city: "",
+    state: "",
+    zip: "",
+    telephone: "",
+    fax: "",
+    mapUrl: "",
+    email: [""],
+    websiteLink: "",
+    other: "",
+    taxId: "",
+    note: "",
+    isActive: true,
   });
 
   useEffect(() => {
@@ -48,80 +48,91 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
       setFormData({
         name: customer.name,
         address: customer.address,
-        suite: customer.suite || '',
+        suiteFloor: customer.suiteFloor || "",
         city: customer.city,
         state: customer.state,
         zip: customer.zip,
         telephone: customer.telephone,
-        fax: customer.fax || '',
-        mapUrl: customer.mapUrl || '',
-        emails: customer.emails.length > 0 ? customer.emails : [''],
-        website: customer.website || '',
-        others: customer.others || '',
-        taxId: customer.taxId || '',
-        notes: customer.notes || '',
-        active: customer.active,
+        fax: customer.fax || "",
+        mapUrl: customer.mapUrl || "",
+        email: customer.email.length > 0 ? customer.email : [""],
+        websiteLink: customer.websiteLink || "",
+        other: customer.other || "",
+        taxId: customer.taxId || "",
+        note: customer.note || "",
+        isActive: customer.isActive ?? true,
       });
     } else {
       setFormData({
-        name: '',
-        address: '',
-        suite: '',
-        city: '',
-        state: '',
-        zip: '',
-        telephone: '',
-        fax: '',
-        mapUrl: '',
-        emails: [''],
-        website: '',
-        others: '',
-        taxId: '',
-        notes: '',
-        active: true,
+        name: "",
+        address: "",
+        suiteFloor: "",
+        city: "",
+        state: "",
+        zip: "",
+        telephone: "",
+        fax: "",
+        mapUrl: "",
+        email: [""],
+        websiteLink: "",
+        other: "",
+        taxId: "",
+        note: "",
+        isActive: true,
       });
     }
   }, [customer, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const emailsFiltered = formData.emails.filter(email => email.trim() !== '');
+    const emailsFiltered = formData.email.filter((email) => email.trim() !== "");
     onSubmit({
-      ...formData,
-      emails: emailsFiltered,
+      name: formData.name,
+      address: formData.address,
+      suiteFloor: formData.suiteFloor || undefined,
+      city: formData.city,
+      state: formData.state,
+      zip: formData.zip,
+      telephone: formData.telephone,
+      fax: formData.fax || undefined,
+      mapUrl: formData.mapUrl || undefined,
+      email: emailsFiltered,
+      websiteLink: formData.websiteLink || undefined,
+      taxId: formData.taxId || undefined,
+      other: formData.other || undefined,
+      note: formData.note || undefined,
+      isActive: formData.isActive,
     });
   };
 
   const addEmailField = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      emails: [...prev.emails, '']
+      email: [...prev.email, ""],
     }));
   };
 
   const removeEmailField = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      emails: prev.emails.filter((_, i) => i !== index)
+      email: prev.email.filter((_, i) => i !== index),
     }));
   };
 
   const updateEmail = (index: number, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      emails: prev.emails.map((email, i) => i === index ? value : email)
+      email: prev.email.map((email, i) => (i === index ? value : email)),
     }));
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl md:max-w-4xl max-h-[90vh]  overflow-y-auto">
+      <DialogContent className="max-w-2xl md:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {customer ? 'Edit Customer' : 'Add New Customer'}
-          </DialogTitle>
+          <DialogTitle>{customer ? "Edit Customer" : "Add New Customer"}</DialogTitle>
           <DialogDescription>
-            {customer ? 'Update customer information' : 'Create a new customer profile'}
+            {customer ? "Update customer information" : "Create a new customer profile"}
           </DialogDescription>
         </DialogHeader>
 
@@ -132,7 +143,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                 required
                 placeholder="Company or individual name"
               />
@@ -143,18 +154,18 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="address"
                 value={formData.address}
-                onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, address: e.target.value }))}
                 required
                 placeholder="Street address"
               />
             </div>
 
             <div>
-              <Label htmlFor="suite">Suite/Floor</Label>
+              <Label htmlFor="suiteFloor">Suite/Floor</Label>
               <Input
-                id="suite"
-                value={formData.suite}
-                onChange={(e) => setFormData(prev => ({ ...prev, suite: e.target.value }))}
+                id="suiteFloor"
+                value={formData.suiteFloor}
+                onChange={(e) => setFormData((prev) => ({ ...prev, suiteFloor: e.target.value }))}
                 placeholder="Suite, floor, or unit number"
               />
             </div>
@@ -164,7 +175,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="city"
                 value={formData.city}
-                onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, city: e.target.value }))}
                 required
                 placeholder="City"
               />
@@ -175,7 +186,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="state"
                 value={formData.state}
-                onChange={(e) => setFormData(prev => ({ ...prev, state: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, state: e.target.value }))}
                 required
                 placeholder="State"
               />
@@ -186,7 +197,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="zip"
                 value={formData.zip}
-                onChange={(e) => setFormData(prev => ({ ...prev, zip: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, zip: e.target.value }))}
                 required
                 placeholder="ZIP code"
               />
@@ -197,7 +208,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="telephone"
                 value={formData.telephone}
-                onChange={(e) => setFormData(prev => ({ ...prev, telephone: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, telephone: e.target.value }))}
                 required
                 placeholder="Phone number"
               />
@@ -208,7 +219,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="fax"
                 value={formData.fax}
-                onChange={(e) => setFormData(prev => ({ ...prev, fax: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, fax: e.target.value }))}
                 placeholder="Fax number"
               />
             </div>
@@ -218,7 +229,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="mapUrl"
                 value={formData.mapUrl}
-                onChange={(e) => setFormData(prev => ({ ...prev, mapUrl: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, mapUrl: e.target.value }))}
                 placeholder="Google Maps or other map URL"
               />
             </div>
@@ -226,7 +237,7 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
             <div className="md:col-span-2">
               <Label>Email Addresses</Label>
               <div className="space-y-2">
-                {formData.emails.map((email, index) => (
+                {formData.email.map((email, index) => (
                   <div key={index} className="flex gap-2">
                     <Input
                       value={email}
@@ -234,13 +245,8 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
                       placeholder="Email address"
                       type="email"
                     />
-                    {formData.emails.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => removeEmailField(index)}
-                      >
+                    {formData.email.length > 1 && (
+                      <Button type="button" variant="outline" size="icon" onClick={() => removeEmailField(index)}>
                         <X className="h-4 w-4" />
                       </Button>
                     )}
@@ -260,11 +266,11 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
             </div>
 
             <div>
-              <Label htmlFor="website">Website</Label>
+              <Label htmlFor="websiteLink">Website</Label>
               <Input
-                id="website"
-                value={formData.website}
-                onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
+                id="websiteLink"
+                value={formData.websiteLink}
+                onChange={(e) => setFormData((prev) => ({ ...prev, websiteLink: e.target.value }))}
                 placeholder="Company website"
               />
             </div>
@@ -274,27 +280,27 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
               <Input
                 id="taxId"
                 value={formData.taxId}
-                onChange={(e) => setFormData(prev => ({ ...prev, taxId: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, taxId: e.target.value }))}
                 placeholder="Tax identification number"
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="others">Others</Label>
+              <Label htmlFor="other">Others</Label>
               <Input
-                id="others"
-                value={formData.others}
-                onChange={(e) => setFormData(prev => ({ ...prev, others: e.target.value }))}
+                id="other"
+                value={formData.other}
+                onChange={(e) => setFormData((prev) => ({ ...prev, other: e.target.value }))}
                 placeholder="Additional information"
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="note">Notes</Label>
               <Textarea
-                id="notes"
-                value={formData.notes}
-                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                id="note"
+                value={formData.note}
+                onChange={(e) => setFormData((prev) => ({ ...prev, note: e.target.value }))}
                 placeholder="Additional notes about the customer"
                 rows={3}
               />
@@ -303,24 +309,20 @@ export function CustomerModal({ isOpen, onClose, onSubmit, customer }: CustomerM
             <div className="md:col-span-2">
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id="active"
-                  checked={formData.active}
-                  onCheckedChange={(checked) => 
-                    setFormData(prev => ({ ...prev, active: checked as boolean }))
-                  }
+                  id="isActive"
+                  checked={formData.isActive}
+                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isActive: checked as boolean }))}
                 />
-                <Label htmlFor="active">Active Customer</Label>
+                <Label htmlFor="isActive">Active Customer</Label>
               </div>
             </div>
           </div>
 
-          <DialogFooter className='gap-4 '>
+          <DialogFooter className="gap-4">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">
-              {customer ? 'Update Customer' : 'Create Customer'}
-            </Button>
+            <Button type="submit">{customer ? "Update Customer" : "Create Customer"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

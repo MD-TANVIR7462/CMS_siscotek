@@ -128,7 +128,8 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-2">
-                    <Link href={`/customers/${customer.id}`}>
+                    <Link href={`/customers/`}>
+                    {/* <Link href={`/customers/${customer?._id}`}> */}
                       <Button variant="ghost" size="sm">
                         <Eye className="h-4 w-4" />
                       </Button>
