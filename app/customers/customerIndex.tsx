@@ -51,7 +51,7 @@ const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
     setIsModalOpen(false);
   };
 
-  const handleEditCustomer = (customerData: Omit<Customer, "id" | "createdAt" | "updatedAt">) => {
+  const handleEditCustomer = (customerData: Partial<Customer>) => {
     if (editingCustomer) {
       // const updatedCustomer: Customer = {
       //   ...customerData,
