@@ -1,25 +1,47 @@
-export interface Customer {
-  id: string;
+// export interface Customer { //this is moc data type
+//   id: string;
+//   name: string;
+//   address: string;
+//   suite?: string;
+//   city: string;
+//   state: string;
+//   zip: string;
+//   telephone: string;
+//   fax?: string;
+//   mapUrl?: string;
+//   emails: string[];
+//   website?: string;
+//   others?: string;
+//   taxId?: string;
+//   notes?: string;
+//   active: boolean;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
+
+export type Customer = {
+  id(id: any): void; // this is backend data type comes form the DB+backend
+  _id: string;
   name: string;
   address: string;
-  suite?: string;
+  suiteFloor?: string;
   city: string;
   state: string;
   zip: string;
   telephone: string;
   fax?: string;
   mapUrl?: string;
-  emails: string[];
-  website?: string;
-  others?: string;
+  email: string[];
+  websiteLink?: string;
   taxId?: string;
-  notes?: string;
-  active: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-
+  other?: string;
+  note?: string;
+  isActive?: boolean;
+  isDeleted?: boolean;
+  createdAt: string; // or Date if you plan to parse it as a Date
+  updatedAt: string; // or Date
+  __v?: number;
+};
 
 export interface Equipment {
   serialNumber: string;
@@ -27,7 +49,7 @@ export interface Equipment {
   id: string;
   customerId: string;
   userId: string;
-  type: 'computer' | 'software' | 'printer' | 'router' | 'switch' | 'modem' | 'others' | 'work';
+  type: "computer" | "software" | "printer" | "router" | "switch" | "modem" | "others" | "work";
   equipmentName: string;
   location?: string;
   equipmentType?: string;
