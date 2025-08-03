@@ -4,7 +4,7 @@ import CustomerIndex from "./customerIndex";
 
 const CustomerPage = async () => {
   const customerData = (await getData("customer/get-customer"))?.data;
-  console.log(customerData);
+
   return <>{customerData && <CustomerIndex customerData={customerData} />}</>;
 };
 
