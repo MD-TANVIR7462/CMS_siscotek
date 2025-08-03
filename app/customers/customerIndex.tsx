@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search } from "lucide-react";
 import { AddCustomer, Customer } from "@/types/customer";
+import { createData } from "@/server/serverActions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
-  console.log(customerData);
-  const [customers, setCustomers] = useState<Customer[]>(customerData);
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
   const [activeSearchTerm, setActiveSearchTerm] = useState("");
@@ -33,22 +35,35 @@ const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
   };
 
   const activeCustomers = filterCustomers(
-    customers.filter((customer) => customer.isActive),
+    customerData.filter((customer) => customer.isActive),
     activeSearchTerm
   );
   const inactiveCustomers = filterCustomers(
-    customers.filter((customer) => !customer.isActive),
+    customerData.filter((customer) => !customer.isActive),
     inactiveSearchTerm
   );
 
-  const handleAddCustomer = (customerData: AddCustomer) => {
+  const handleAddCustomer = async (customerData: AddCustomer) => {
     const newCustomer: AddCustomer = {
       ...customerData,
     };
 
-    console.log(newCustomer);
-    // setCustomers([...customers, newCustomer]);
-    setIsModalOpen(false);
+    try {
+      const insertNewCustomer = await createData("customer/create-customer", newCustomer, "");
+      console.log({ inserCustomer: insertNewCustomer });
+      if (insertNewCustomer?.success) {
+        toast.success("Customer created successfully.");
+        setIsModalOpen(false);
+        router.refresh();
+      } else {
+        toast.error(insertNewCustomer?.message || "Unable to create customer right now.");
+        setIsModalOpen(false);
+        router.refresh();
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Application Error!");
+      router.refresh();
+    }
   };
 
   const handleEditCustomer = (customerData: Partial<Customer>) => {
@@ -59,7 +74,7 @@ const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
       //   createdAt: editingCustomer.createdAt,
       //   updatedAt: new Date(),
       // };
-      // setCustomers(customers.map((customer) => (customer.id === editingCustomer.id ? updatedCustomer : customer)));
+
       setEditingCustomer(null);
       setIsModalOpen(false);
     }
@@ -99,8 +114,8 @@ const CustomerIndex = ({ customerData }: { customerData: Customer[] }) => {
 
           <Tabs defaultValue="active" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="active">Active ({customers.filter((c) => c.isActive).length})</TabsTrigger>
-              <TabsTrigger value="inactive">Inactive ({customers.filter((c) => !c.isActive).length})</TabsTrigger>
+              <TabsTrigger value="active">Active ({customerData?.filter((c) => c.isActive).length})</TabsTrigger>
+              <TabsTrigger value="inactive">Inactive ({customerData?.filter((c) => !c.isActive).length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="active" className="space-y-4">
