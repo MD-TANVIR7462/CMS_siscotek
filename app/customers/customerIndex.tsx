@@ -7,16 +7,12 @@ import { CustomerTable } from "@/components/customers/customer-table";
 import { CustomerModal } from "@/components/customers/customer-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Search } from "lucide-react";
 import { AddCustomer, Customer } from "@/types/customer";
-import { createData, updateData } from "@/server/serverActions";
+import { createData, deleteData, updateData } from "@/server/serverActions";
 import { toast } from "sonner";
+import { ConfirmAndDelete } from "@/components/shared/ConfirmAndDelete";
 
 type Props = {
   customerData: Customer[];
@@ -89,14 +85,8 @@ const CustomerIndex = ({ customerData }: Props) => {
       toast.warning("No customer selected for editing.");
       return;
     }
-
     try {
-      const res = await updateData(
-        "customer/update-customer",
-        editingCustomer._id as string,
-        data,
-        ""
-      );
+      const res = await updateData("customer/update-customer", editingCustomer._id as string, data, "");
       if (res?.success) {
         toast.success("Customer updated successfully.");
       } else {
@@ -111,8 +101,7 @@ const CustomerIndex = ({ customerData }: Props) => {
   };
 
   const handleDeleteCustomer = (id: string) => {
-    // Add deletion logic here when implemented
-    console.log("Delete customer with id:", id);
+   ConfirmAndDelete(id, "customer",router)
   };
 
   const handleSearchChange = (type: "active" | "inactive", value: string) => {
@@ -134,14 +123,9 @@ const CustomerIndex = ({ customerData }: Props) => {
           <div className="flex items-center justify-between mb-8 mt-12 lg:mt-0">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
-              <p className="text-muted-foreground mt-2">
-                Manage your customer database and relationships
-              </p>
+              <p className="text-muted-foreground mt-2">Manage your customer database and relationships</p>
             </div>
-            <Button
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Add New Customer
             </Button>
@@ -150,12 +134,8 @@ const CustomerIndex = ({ customerData }: Props) => {
           {/* Tabs */}
           <Tabs defaultValue="active" className="space-y-6">
             <TabsList className="grid w-full max-w-md grid-cols-2">
-              <TabsTrigger value="active">
-                Active ({customerData.filter((c) => c.isActive).length})
-              </TabsTrigger>
-              <TabsTrigger value="inactive">
-                Inactive ({customerData.filter((c) => !c.isActive).length})
-              </TabsTrigger>
+              <TabsTrigger value="active">Active ({customerData.filter((c) => c.isActive).length})</TabsTrigger>
+              <TabsTrigger value="inactive">Inactive ({customerData.filter((c) => !c.isActive).length})</TabsTrigger>
             </TabsList>
 
             {/* Active Tab */}
@@ -165,17 +145,11 @@ const CustomerIndex = ({ customerData }: Props) => {
                 <Input
                   placeholder="Search active customers..."
                   value={searchTerms.active}
-                  onChange={(e) =>
-                    handleSearchChange("active", e.target.value)
-                  }
+                  onChange={(e) => handleSearchChange("active", e.target.value)}
                   className="pl-10"
                 />
               </div>
-              <CustomerTable
-                customers={activeCustomers}
-                onEdit={openEditModal}
-                onDelete={handleDeleteCustomer}
-              />
+              <CustomerTable customers={activeCustomers} onEdit={openEditModal} onDelete={handleDeleteCustomer} />
             </TabsContent>
 
             {/* Inactive Tab */}
@@ -185,17 +159,11 @@ const CustomerIndex = ({ customerData }: Props) => {
                 <Input
                   placeholder="Search inactive customers..."
                   value={searchTerms.inactive}
-                  onChange={(e) =>
-                    handleSearchChange("inactive", e.target.value)
-                  }
+                  onChange={(e) => handleSearchChange("inactive", e.target.value)}
                   className="pl-10"
                 />
               </div>
-              <CustomerTable
-                customers={inactiveCustomers}
-                onEdit={openEditModal}
-                onDelete={handleDeleteCustomer}
-              />
+              <CustomerTable customers={inactiveCustomers} onEdit={openEditModal} onDelete={handleDeleteCustomer} />
             </TabsContent>
           </Tabs>
         </div>
