@@ -101,7 +101,7 @@ const CustomerIndex = ({ customerData }: Props) => {
   };
 
   const handleDeleteCustomer = (id: string) => {
-   ConfirmAndDelete(id, "customer",router)
+   ConfirmAndDelete(id, "customer/delete-customer",router)
   };
 
   const handleSearchChange = (type: "active" | "inactive", value: string) => {

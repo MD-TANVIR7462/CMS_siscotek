@@ -153,7 +153,7 @@ export function EquipmentForm({
 
   const renderComputerFields = () => (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <div className="space-y-2">
           <Label htmlFor="equipmentName">Equipment Name *</Label>
           <Input
@@ -505,7 +505,7 @@ export function EquipmentForm({
   );
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-4xl mx-auto mt-5">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold text-gray-900">

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Edit, Trash2, Eye, Phone, Mail, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface CustomerTableProps {
   customers: Customer[];
@@ -25,7 +26,7 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
       </Card>
     );
   }
-
+  const router = useRouter();
   return (
     <div className="space-y-4">
       {/* Mobile Cards View */}
@@ -97,7 +98,7 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
           </TableHeader>
           <TableBody>
             {customers.map((customer) => (
-              <TableRow key={customer?._id}>
+              <TableRow key={customer?._id} onClick={() => router.push(`/customers/${customer._id}`)} className="cursor-pointer">
                 <TableCell className="font-medium">
                   <div>
                     <div className="font-semibold">{customer.name}</div>
@@ -128,19 +129,23 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-2">
-                    <Link href={`/customers/`}>
-                    {/* <Link href={`/customers/${customer?._id}`}> */}
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                    <Button variant="ghost" size="sm" onClick={() => onEdit(customer)}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(customer);
+                      }}
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => onDelete(customer?._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(customer?._id);
+                      }}
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />

@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   ArrowLeft,
@@ -36,7 +35,7 @@ import {
   PanelRightOpen,
 } from "lucide-react";
 import { Customer, Equipment, CustomerUser } from "@/types/customer";
-import { mockCustomers, mockEquipment, mockCustomerUsers } from "@/lib/mock-data";
+import { mockEquipment, mockCustomerUsers } from "@/lib/mock-data";
 import { EquipmentManagement } from "@/components/customers/EquipmentManagement";
 
 interface WidgetVisibility {
@@ -45,12 +44,13 @@ interface WidgetVisibility {
   customerSummary: boolean;
 }
 
-export default function CustomerDetailPage() {
+export default function CustomerDetailPage({ customer }: { customer: Customer }) {
   const params = useParams();
   const router = useRouter();
   const customerId = params.id as string;
 
-  const [customer, setCustomer] = useState<Customer | null>(null);
+
+  // const [customer, setCustomer] = useState<Customer | null>(null);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [users, setUsers] = useState<CustomerUser[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -63,13 +63,13 @@ export default function CustomerDetailPage() {
   });
 
   useEffect(() => {
-    const foundCustomer = mockCustomers.find((c) => c.id === customerId);
-    setCustomer(foundCustomer || null);
+    // const foundCustomer = mockCustomers.find((c) => c._id === customerId);
+    // setCustomer(foundCustomer || null);
 
-    const customerEquipment = mockEquipment.filter((e) => e.customerId === customerId);
+    const customerEquipment = mockEquipment.filter((e) => e.customerId === "1");
     setEquipment(customerEquipment);
 
-    const customerUsers = mockCustomerUsers.filter((u) => u.customerId === customerId);
+    const customerUsers = mockCustomerUsers.filter((u) => u.customerId === "1");
     setUsers(customerUsers);
 
     // Auto-select first user if available
@@ -238,16 +238,16 @@ export default function CustomerDetailPage() {
         <CardContent className="p-3 space-y-3">
           <div>
             <p className="text-xs text-muted-foreground">Email</p>
-            <p className="text-xs font-medium">{customer.emails[0]}</p>
+            <p className="text-xs font-medium">{customer?.email?.[0]}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Phone</p>
-            <p className="text-xs font-medium">01998863753</p>
+            <p className="text-xs font-medium">{customer?.telephone}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Location</p>
             <p className="text-xs font-medium">
-              {customer.city}, {customer.state}
+              {customer?.city}, {customer?.state}
             </p>
           </div>
           <div>
@@ -270,7 +270,7 @@ export default function CustomerDetailPage() {
           <div className="mb-6 mt-12 lg:mt-0">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{customer.name}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{customer?.name}</h1>
                 <p className="text-muted-foreground mt-1 text-sm sm:text-base">Customer Details & Management</p>
               </div>
               <div className="flex items-center gap-2">
@@ -405,8 +405,11 @@ export default function CustomerDetailPage() {
               <Card className="mb-6 sm:mb-8">
                 <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <CardTitle>Customer Information</CardTitle>
-                  <Badge variant={customer.active ? "default" : "secondary"} className="text-sm self-end sm:self-auto">
-                    {customer.active ? "Active" : "Inactive"}
+                  <Badge
+                    variant={customer.isActive ? "default" : "secondary"}
+                    className="text-sm self-end sm:self-auto"
+                  >
+                    {customer?.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </CardHeader>
 
@@ -419,10 +422,10 @@ export default function CustomerDetailPage() {
                           <p className="font-medium">Address</p>
                           <p className="text-sm text-muted-foreground">
                             {customer.address}
-                            {customer.suite && `, ${customer.suite}`}
+                            {customer?.suiteFloor && `, ${customer.suiteFloor}`}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {customer.city}, {customer.state} {customer.zip}
+                            {customer.city}, {customer?.state} {customer?.zip}
                           </p>
                         </div>
                       </div>
@@ -433,7 +436,7 @@ export default function CustomerDetailPage() {
                         <Phone className="h-4 w-4 text-muted-foreground mt-0.5" />
                         <div>
                           <p className="font-medium">Phone</p>
-                          <p className="text-sm text-muted-foreground">{customer.telephone}</p>
+                          <p className="text-sm text-muted-foreground">{customer?.telephone}</p>
                           {customer.fax && <p className="text-sm text-muted-foreground">Fax: {customer.fax}</p>}
                         </div>
                       </div>
@@ -444,27 +447,28 @@ export default function CustomerDetailPage() {
                         <Mail className="h-4 w-4 text-muted-foreground mt-0.5" />
                         <div>
                           <p className="font-medium">Email</p>
-                          {customer.emails.map((email, index) => (
-                            <p key={index} className="text-sm text-muted-foreground">
-                              {email}
-                            </p>
-                          ))}
+                          {customer.email &&
+                            customer?.email?.map((email, index) => (
+                              <p key={index} className="text-sm text-muted-foreground">
+                                {email}
+                              </p>
+                            ))}
                         </div>
                       </div>
                     </div>
 
-                    {customer.website && (
+                    {customer?.websiteLink && (
                       <div className="flex items-start gap-2">
                         <Globe className="h-4 w-4 text-muted-foreground mt-0.5" />
                         <div>
                           <p className="font-medium">Website</p>
                           <a
-                            href={customer.website}
+                            href={customer?.websiteLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-blue-600 hover:underline break-all"
                           >
-                            {customer.website}
+                            {customer?.websiteLink}
                           </a>
                         </div>
                       </div>
@@ -480,10 +484,10 @@ export default function CustomerDetailPage() {
                       </div>
                     )}
 
-                    {customer.notes && (
+                    {customer?.note && (
                       <div className="md:col-span-2 lg:col-span-3">
                         <p className="font-medium">Notes</p>
-                        <p className="text-sm text-muted-foreground mt-1">{customer.notes}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{customer?.note}</p>
                       </div>
                     )}
                   </div>

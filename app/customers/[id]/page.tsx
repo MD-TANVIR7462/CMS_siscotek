@@ -1,12 +1,17 @@
-import { mockCustomers } from "@/lib/mock-data";
+// app/customer/[id]/page.tsx (example)
+import { getSingleData } from "@/server/serverActions";
 import CustomerDetailPage from "./CustomerDetails";
 
-export function generateStaticParams() {
-  return mockCustomers.map((customer) => ({
-    id: customer.id,
-  }));
+interface PageProps {
+  params: {
+    id: string;
+  };
 }
 
-export default function Page() {
-  return <CustomerDetailPage />;
+export default async function Page({ params }: PageProps) {
+  const { id } = params;
+  const customer = await getSingleData("customer/get-customer", id);
+
+
+  return <CustomerDetailPage customer={customer?.data} />;
 }

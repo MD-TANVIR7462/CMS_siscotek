@@ -1,53 +1,5 @@
 import { Customer, Equipment, CustomerUser } from '@/types/customer';
 
-export const mockCustomers: Customer[] = [
-  {
-    id: '1',
-    name: 'SISCOTEK',
-    address: '123 Business Ave',
-    suite: 'Suite 100',
-    city: 'New York',
-    state: 'NY',
-    zip: '10001',
-    telephone: '(555) 123-4567',
-    fax: '(555) 123-4568',
-    emails: ['contact@acme.com', 'support@acme.com'],
-    website: 'https://acme.com',
-    taxId: '12-3456789',
-    notes: 'Important client with multiple locations',
-    active: true,
-    createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15'),
-  },
-  {
-    id: '2',
-    name: 'Tech Solutions Inc',
-    address: '456 Innovation Dr',
-    city: 'San Francisco',
-    state: 'CA',
-    zip: '94105',
-    telephone: '(555) 987-6543',
-    emails: ['info@techsolutions.com'],
-    website: 'https://techsolutions.com',
-    active: true,
-    createdAt: new Date('2024-01-10'),
-    updatedAt: new Date('2024-01-10'),
-  },
-  {
-    id: '3',
-    name: 'Global Enterprises',
-    address: '789 Corporate Blvd',
-    city: 'Chicago',
-    state: 'IL',
-    zip: '60601',
-    telephone: '(555) 456-7890',
-    emails: ['admin@global.com'],
-    active: false,
-    createdAt: new Date('2023-12-01'),
-    updatedAt: new Date('2023-12-01'),
-  },
-];
-
 export const mockCustomerUsers: CustomerUser[] = [
   {
     id: '1',
