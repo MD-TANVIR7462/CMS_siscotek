@@ -7,6 +7,7 @@ import { Lock, User, Eye, EyeOff, ArrowRight, RefreshCw } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { toast } from "sonner";
 
 // Validation schema
 const formSchema = z.object({
@@ -59,10 +60,12 @@ export default function LoginPage() {
 
     try {
       // Simulate API call
-      await new Promise((res) => setTimeout(res, 150));
+      await new Promise((res) => setTimeout(res, 100));
 
       if (data.email === "admin@example.com" && data.password === "admin123") {
         router.replace("/customers");
+         toast.success("Successfully Logged in!");
+
       } else {
         setError("Invalid credentials. Please try again.");
       }

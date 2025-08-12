@@ -91,8 +91,8 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
               <TableHead>Name</TableHead>
               <TableHead>Location</TableHead>
               <TableHead>Contact</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
+              {/* <TableHead>Status</TableHead>
+              <TableHead>Created</TableHead> */}
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -119,14 +119,14 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
                     <div className="text-muted-foreground">{customer?.email[0]}</div>
                   </div>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <Badge variant={customer.isActive ? "default" : "secondary"}>
                     {customer.isActive ? "Active" : "Inactive"}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {new Date(customer?.createdAt).toLocaleDateString()}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <div className="flex items-center justify-end gap-2">
                     <Button
@@ -139,7 +139,7 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button
+                    {/* <Button
                       variant="ghost"
                       size="sm"
                       onClick={(e) => {
@@ -149,7 +149,7 @@ export function CustomerTable({ customers, onEdit, onDelete }: CustomerTableProp
                       className="text-destructive hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
-                    </Button>
+                    </Button> */}
                   </div>
                 </TableCell>
               </TableRow>

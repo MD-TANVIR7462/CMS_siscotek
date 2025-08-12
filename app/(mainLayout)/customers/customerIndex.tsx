@@ -140,7 +140,7 @@ const CustomerIndex = ({ customerData }: Props) => {
 
             {/* Active Tab */}
             <TabsContent value="active" className="space-y-4">
-              <div className="relative max-w-md mx-auto">
+              <div className="relative max-w-md ms-auto">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search active customers..."
@@ -154,7 +154,7 @@ const CustomerIndex = ({ customerData }: Props) => {
 
             {/* Inactive Tab */}
             <TabsContent value="inactive" className="space-y-4">
-              <div className="relative max-w-md mx-auto">
+              <div className="relative max-w-md ms-auto">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search inactive customers..."
