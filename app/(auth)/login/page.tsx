@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Lock, User, Eye, EyeOff, ArrowRight, RefreshCw } from "lucide-react";
+import { Lock, User, Eye, EyeOff, ArrowRight, RefreshCw, Cross, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -77,30 +77,31 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-xl"
       >
-        <div className="bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-700">
+        <div className=" rounded-md shadow-xl overflow-hidden border bg-white">
           <div className="p-8">
             {/* Header */}
             <div className="text-center mb-8">
               <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 200 }}>
-                <div className="w-16 h-16 bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Lock className="text-white" size={24} />
                 </div>
               </motion.div>
               {/* <h1 className="text-2xl font-bold text-white mb-1">Secure Admin Portal</h1> */}
-              <p className="text-gray-400">Sign in to access your CMS</p>
+              <p className="text-gray-600">Sign in to access your CMS</p>
             </div>
 
             {/* Error message */}
             {error && (
-              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-3 bg-red-500/20 text-red-200 rounded-lg text-sm border border-red-500/30">
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between  mb-6 p-3 bg-red-500/20 text-red-600 rounded-lg text-sm border border-red-500/30">
                 {error}
+                <X className="w-4 h-4  rounded-[2px] cursor-pointer" onClick={()=>setError("")}/>
               </motion.div>
             )}
 
@@ -129,9 +130,9 @@ export default function LoginPage() {
                 rightElement={
                   <button type="button" onClick={() => setShowPassword(!showPassword)}>
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-300" />
+                      <EyeOff className="h-5 w-5 text-gray-500 hover:text-gray-600 transition-colors duration-150" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-300" />
+                      <Eye className="h-5 w-5 text-gray-500 hover:text-gray-600 transition-colors duration-150" />
                     )}
                   </button>
                 }
@@ -139,15 +140,15 @@ export default function LoginPage() {
 
               {/* CAPTCHA */}
               <div>
-                <label className="flex items-center gap-3 text-sm font-medium text-gray-300 mb-1">
+                <label className="flex items-center gap-3 text-sm font-medium  mb-1">
                   CAPTCHA ({captcha.num1} + {captcha.num2})
-                  <button type="button" onClick={generateCaptcha} className="text-indigo-400 hover:text-indigo-600 transition-colors">
+                  <button type="button" onClick={generateCaptcha} className="text-indigo-500 hover:text-indigo-700 transition-colors">
                     <RefreshCw className="h-4 w-4" />
                   </button>
                 </label>
                 <input
                   type="number"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full  border border-gray-300 rounded-md py-3 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 ring-black"
                   placeholder="Answer"
                   {...register("captchaAnswer")}
                 />
@@ -160,7 +161,7 @@ export default function LoginPage() {
                 disabled={isLoading}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className={`w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 focus:ring-2 focus:ring-indigo-500 ${
+                className={`w-full flex justify-center items-center py-3 px-4 rounded-lg text-sm font-medium text-white  bg-black ${
                   isLoading ? "opacity-80 cursor-not-allowed" : ""
                 }`}
               >
@@ -176,7 +177,7 @@ export default function LoginPage() {
           </div>
 
           {/* Footer */}
-          <div className="px-8 py-4 bg-gray-900 text-center border-t border-gray-700">
+          <div className="px-8 py-4 bg-gray-200 text-center border-t border-gray-300">
             <p className="text-xs text-gray-500">© {new Date().getFullYear()} CMS. All rights reserved by SiSCOTEK.</p>
           </div>
         </div>
@@ -189,7 +190,7 @@ export default function LoginPage() {
 function FormField({ label, id, type, icon, register, error, placeholder, rightElement }: any) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-300 mb-1">
+      <label htmlFor={id} className="block text-sm font-medium  mb-1">
         {label}
       </label>
       <div className="relative">
@@ -197,7 +198,7 @@ function FormField({ label, id, type, icon, register, error, placeholder, rightE
         <input
           id={id}
           type={type}
-          className="w-full bg-gray-700 border border-gray-600 rounded-lg py-3 pl-10 pr-12 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-gray-300 rounded-md py-3 pl-10 pr-12 text-black placeholder-gray-400 "
           placeholder={placeholder}
           {...register}
         />
