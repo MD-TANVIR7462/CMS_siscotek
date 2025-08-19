@@ -1,14 +1,17 @@
-"use server"
+"use server";
 import { envConfig } from "@/lib/envConfig";
 
-const BASE_URL = envConfig.SERVER_BASE_URL; // Can be dynamic
-// const BASE_URL = envConfig.LOCAL_BASE_URL; // Can be dynamic
+// const BASE_URL = envConfig.SERVER_BASE_URL; // Can be dynamic
+const BASE_URL = envConfig.LOCAL_BASE_URL; // Can be dynamic
 
 // GET ALL DATA
 export const getData = async (endpoint: string, token?: string) => {
   try {
     const res = await fetch(`${BASE_URL}/${endpoint}`, {
       cache: "no-store",
+      headers: {
+        ...(token && { Authorization: `${token}` }),
+      },
     });
 
     const data = await res.json();
@@ -20,9 +23,11 @@ export const getData = async (endpoint: string, token?: string) => {
 };
 
 // GET SINGLE DATA
-export const getSingleData = async (endpoint: string, id: string) => {
+export const getSingleData = async (endpoint: string, id: string, token?: string) => {
   try {
-    const res = await fetch(`${BASE_URL}/${endpoint}/${id}`, { cache: "no-store" });
+    const res = await fetch(`${BASE_URL}/${endpoint}/${id}`, {
+      cache: "no-store",
+    });
     const data = await res.json();
     return data;
   } catch (error) {
@@ -36,7 +41,7 @@ export const createData = async (endpoint: string, data: any, token?: string) =>
   try {
     const res = await fetch(`${BASE_URL}/${endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...(token && { Authorization: `${token}` }) },
       body: JSON.stringify(data),
     });
     const response = await res.json();
@@ -54,6 +59,7 @@ export const updateData = async (endpoint: string, id: string, data: any, token?
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        ...(token && { Authorization: `${token}` }),
       },
       body: JSON.stringify(data),
     });
@@ -81,7 +87,6 @@ export const deleteData = async (endpoint: string, id: string, token?: string) =
     return { error: errorMessage };
   }
 };
-
 // // GET SETTINGS
 // export const getSettings = async () => {
 //   try {
