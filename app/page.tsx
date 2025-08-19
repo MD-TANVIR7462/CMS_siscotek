@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -24,13 +25,14 @@ export default function LoginPage() {
           setIsChecking(false);
           disPatch(logout());
         } else {
-          router.replace("/customer");
+          router.replace("/customers");
         }
       } else {
         setIsChecking(false);
+         router.replace("/login");
       }
     } catch (err) {
-      router.push("/login");
+      router.replace("/login");
       return;
     }
   };
