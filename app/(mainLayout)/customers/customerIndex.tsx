@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/sidebar";
 import { CustomerTable } from "@/components/customers/customer-table";
@@ -8,11 +8,13 @@ import { CustomerModal } from "@/components/customers/customer-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search } from "lucide-react";
+import { PanelRightClose, PanelRightOpen, Plus, Search } from "lucide-react";
 import { AddCustomer, Customer } from "@/types/customer";
 import { createData, deleteData, updateData } from "@/server/serverActions";
 import { toast } from "sonner";
 import { ConfirmAndDelete } from "@/components/shared/ConfirmAndDelete";
+
+import { CalenderWidget, MobileWidgetsButton } from "@/components/shared/CalenderWidget";
 
 type Props = {
   customerData: Customer[];
@@ -23,6 +25,7 @@ const CustomerIndex = ({ customerData }: Props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
+  const [isWidgetSectionVisible, setIsWidgetSectionVisible] = useState(true);
   const [searchTerms, setSearchTerms] = useState({
     active: "",
     inactive: "",
@@ -101,7 +104,7 @@ const CustomerIndex = ({ customerData }: Props) => {
   };
 
   const handleDeleteCustomer = (id: string) => {
-   ConfirmAndDelete(id, "customer/delete-customer",router)
+    ConfirmAndDelete(id, "customer/delete-customer", router);
   };
 
   const handleSearchChange = (type: "active" | "inactive", value: string) => {
@@ -112,9 +115,32 @@ const CustomerIndex = ({ customerData }: Props) => {
     setEditingCustomer(customer);
     setIsModalOpen(true);
   };
+  const customerId = customerData[0]._id;
+
+  // ?widget
+  useEffect(() => {
+    // Auto-select first user if available
+
+    // Hide widget section on mobile by default
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsWidgetSectionVisible(false);
+      } else {
+        setIsWidgetSectionVisible(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [customerId]);
+
+  const toggleWidgetSection = () => {
+    setIsWidgetSectionVisible(!isWidgetSectionVisible);
+  };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className={`flex min-h-screen bg-background transition-all duration-300 ${isWidgetSectionVisible ? "lg:pr-[280px]" : ""}`}>
       <main className="flex-1  p-4 lg:p-8">
         <div className="">
           {/* Header */}
@@ -123,10 +149,19 @@ const CustomerIndex = ({ customerData }: Props) => {
               <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
               <p className="text-muted-foreground mt-2">Manage your customer database and relationships</p>
             </div>
-            <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Add New Customer
-            </Button>
+            <div className="flex ">
+              <Button variant="ghost" size="sm" onClick={toggleWidgetSection} className="hidden lg:flex">
+                {isWidgetSectionVisible ? (
+                  <PanelRightClose className="h-5 w-5" />
+                ) : (
+                  <PanelRightOpen className="h-5 w-5" />
+                )}
+              </Button>
+              <Button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Add New Customer
+              </Button>
+            </div>
           </div>
 
           {/* Tabs */}
@@ -166,7 +201,26 @@ const CustomerIndex = ({ customerData }: Props) => {
           </Tabs>
         </div>
       </main>
+      {/* Widget Section */}
+      <CalenderWidget
+        customer={customerData[0]}
+        isVisible={isWidgetSectionVisible}
+        onToggleVisibility={toggleWidgetSection}
+        className="hidden lg:block"
+      />
 
+      {/* Mobile Widget Overlay */}
+      {isWidgetSectionVisible && (
+        <div className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40">
+          <CalenderWidget
+            customer={customerData[0]}
+            isVisible={isWidgetSectionVisible}
+            onToggleVisibility={toggleWidgetSection}
+          />
+        </div>
+      )}
+
+      <MobileWidgetsButton isVisible={isWidgetSectionVisible} onClick={toggleWidgetSection} />
       {/* Modal */}
       <CustomerModal
         isOpen={isModalOpen}

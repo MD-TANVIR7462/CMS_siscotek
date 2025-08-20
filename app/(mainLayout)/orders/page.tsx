@@ -10,7 +10,7 @@ export default function OrdersPage() {
      
       
       <main className="flex-1  p-4 lg:p-8">
-        <div className="max-w-7xl mx-auto">
+        <div className=" mx-auto">
           <div className="mb-8 mt-12 lg:mt-0">
             <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
             <p className="text-muted-foreground mt-2">
