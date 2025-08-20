@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -16,6 +16,9 @@ import {
   Menu,
   X,
   LogOut,
+
+  PanelLeftClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,12 +39,29 @@ const navigation = [
   { name: "Documents", href: "/documents", icon: File },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, setIsCollapsed: any }) {
   const [isOpen, setIsOpen] = useState(false);
+  // const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-
   const dispatch = useDispatch();
+
+  // Check if device is mobile on initial render and resize
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (mobile) {
+        setIsOpen(false);
+        setIsCollapsed(false);
+      }
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const handleLogout = () => {
     toast.custom((t) => (
@@ -72,68 +92,118 @@ export function Sidebar() {
       </div>
     ));
   };
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setIsOpen(!isOpen);
+    } else {
+      setIsCollapsed(!isCollapsed);
+    }
+  };
+
+  const closeMobileSidebar = () => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  };
+
+  const sidebarWidth = isCollapsed ? "w-16" : "w-64";
+  const sidebarTranslate = isOpen ? "translate-x-0" : "-translate-x-full";
+
   return (
     <>
       {/* Mobile menu button */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Button variant="outline" size="icon" onClick={() => setIsOpen(!isOpen)} className="h-10 w-10">
+        <Button variant="outline" size="icon" onClick={toggleSidebar} className="h-10 w-10">
           {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
 
+      {/* Desktop collapse button */}
+      
+
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-background border-r border-border transform transition-transform duration-200 ease-in-out lg:translate-x-0",
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          "fixed inset-y-0 left-0 z-40 bg-background border-r border-border transform transition-all duration-300 ease-in-out lg:translate-x-0 flex flex-col",
+          isMobile ? `w-64 ${sidebarTranslate}` : `${sidebarWidth} translate-x-0`
         )}
       >
-        <div className="flex flex-col h-full ">
+        <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center  justify-between h-16  px-6 ">
-            <h1 className="text-xl font-bold hidden md:block">CMS</h1>
-            <ThemeToggle  />
+          <div className={cn("flex items-center justify-between h-16 px-4", isCollapsed && "flex-col justify-center")}>
+            <h1 className={cn("text-xl font-bold", isCollapsed ? "hidden" : "block")}>CMS</h1>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              {!isMobile && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleSidebar}
+                  className="h-8 w-8"
+                  title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                >
+                  {isCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
             {navigation.map((item) => {
               const isActive = pathname.startsWith(item.href);
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={closeMobileSidebar}
                   className={cn(
-                    "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    "flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors group",
                     isActive
                       ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent",
+                    isCollapsed && "justify-center"
                   )}
+                  title={isCollapsed ? item.name : ""}
                 >
-                  <item.icon className="mr-3 h-5 w-5" />
-                  {item.name}
+                  <item.icon className={cn("h-5 w-5", !isCollapsed && "mr-3")} />
+                  {!isCollapsed && <span>{item.name}</span>}
+                  {isCollapsed && (
+                    <div className="absolute left-14 ml-2 px-2 py-1 bg-popover text-popover-foreground text-xs rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      {item.name}
+                    </div>
+                  )}
                 </Link>
               );
             })}
           </nav>
 
           {/* Logout button fixed at bottom */}
-          <div className="p-4 border-t border-border">
+          <div className={cn("p-4 border-t border-border", isCollapsed && "flex justify-center")}>
             <Button
               onClick={handleLogout}
               variant="destructive"
-              className="w-full flex items-center justify-center gap-2"
+              className={cn("w-full flex items-center justify-center gap-2", isCollapsed && "w-10 px-0")}
+              title={isCollapsed ? "Logout" : ""}
             >
               <LogOut className="h-4 w-4" />
-              Logout
+              {!isCollapsed && <span>Logout</span>}
             </Button>
           </div>
         </div>
       </div>
 
       {/* Overlay for mobile */}
-      {isOpen && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={() => setIsOpen(false)} />}
+      {isOpen && isMobile && <div className="fixed inset-0 bg-black/50 z-30 lg:hidden" onClick={closeMobileSidebar} />}
+
+      {/* Main content margin adjustment */}
+      <div
+        className={cn(
+          "transition-all duration-300 ease-in-out",
+          isMobile ? "lg:ml-0" : isCollapsed ? "lg:ml-16" : "lg:ml-64"
+        )}
+      />
     </>
   );
 }

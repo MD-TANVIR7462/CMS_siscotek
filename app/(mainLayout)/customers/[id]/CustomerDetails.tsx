@@ -37,6 +37,7 @@ import {
 import { Customer, Equipment, CustomerUser } from "@/types/customer";
 import { mockEquipment, mockCustomerUsers } from "@/lib/mock-data";
 import { EquipmentManagement } from "@/components/customers/EquipmentManagement";
+import { MobileWidgetsButton, WidgetsPanel } from "@/components/shared/WidgetPanel";
 
 interface WidgetVisibility {
   calendar: boolean;
@@ -48,7 +49,6 @@ export default function CustomerDetailPage({ customer }: { customer: Customer })
   const params = useParams();
   const router = useRouter();
   const customerId = params.id as string;
-
 
   // const [customer, setCustomer] = useState<Customer | null>(null);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -105,7 +105,6 @@ export default function CustomerDetailPage({ customer }: { customer: Customer })
   if (!customer) {
     return (
       <div className="flex min-h-screen bg-background">
-        <Sidebar />
         <main className="flex-1 lg:ml-64 p-4 lg:p-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-12">
@@ -131,140 +130,45 @@ export default function CustomerDetailPage({ customer }: { customer: Customer })
     { key: "documents", label: "Documents", icon: Files },
   ];
 
-  const handleUserAdd = (userData: Omit<CustomerUser, "id" | "createdAt" | "updatedAt">) => {
-    const newUser: CustomerUser = {
-      ...userData,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setUsers([...users, newUser]);
-    setSelectedUserId(newUser.id);
-  };
+  // const handleUserAdd = (userData: Omit<CustomerUser, "id" | "createdAt" | "updatedAt">) => {
+  //   const newUser: CustomerUser = {
+  //     ...userData,
+  //     id: Date.now().toString(),
+  //     createdAt: new Date(),
+  //     updatedAt: new Date(),
+  //   };
+  //   setUsers([...users, newUser]);
+  //   setSelectedUserId(newUser.id);
+  // };
 
-  const handleUserUpdate = (userId: string, userData: Omit<CustomerUser, "id" | "createdAt" | "updatedAt">) => {
-    const updatedUser: CustomerUser = {
-      ...userData,
-      id: userId,
-      createdAt: users.find((u) => u.id === userId)?.createdAt || new Date(),
-      updatedAt: new Date(),
-    };
-    setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
-  };
+  // const handleUserUpdate = (userId: string, userData: Omit<CustomerUser, "id" | "createdAt" | "updatedAt">) => {
+  //   const updatedUser: CustomerUser = {
+  //     ...userData,
+  //     id: userId,
+  //     createdAt: users.find((u) => u.id === userId)?.createdAt || new Date(),
+  //     updatedAt: new Date(),
+  //   };
+  //   setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
+  // };
 
-  const handleUserDelete = (userId: string) => {
-    setUsers(users.filter((u) => u.id !== userId));
-    if (selectedUserId === userId) {
-      const remainingUsers = users.filter((u) => u.id !== userId);
-      setSelectedUserId(remainingUsers.length > 0 ? remainingUsers[0].id : null);
-    }
-    setEquipment(equipment.filter((e) => e.userId !== userId));
-  };
+  // const handleUserDelete = (userId: string) => {
+  //   setUsers(users.filter((u) => u.id !== userId));
+  //   if (selectedUserId === userId) {
+  //     const remainingUsers = users.filter((u) => u.id !== userId);
+  //     setSelectedUserId(remainingUsers.length > 0 ? remainingUsers[0].id : null);
+  //   }
+  //   setEquipment(equipment.filter((e) => e.userId !== userId));
+  // };
 
   const selectedUser = users.find((u) => u.id === selectedUserId);
 
-  // Widget Components
-  const CalendarWidget = () =>
-    widgetVisibility.calendar && (
-      <div className="mt-6 w-full ">
-        <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <div className="text-sm font-medium flex items-center gap-2">
-            <CalendarIcon className="h-4 w-4" />
-            Calendar
-          </div>
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => toggleWidget("calendar")}>
-            <EyeOff className="h-3 w-3 text-red-400" />
-          </Button>
-        </div>
-
-        <Calendar
-          mode="single"
-          selected={selectedDate}
-          onSelect={setSelectedDate}
-          className="rounded-md border shadow-sm w-full"
-          captionLayout="dropdown"
-        />
-      </div>
-    );
-
-  const QuickStatsWidget = () =>
-    widgetVisibility.quickStats && (
-      <Card className="mb-4 h">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <BarChart3 className="h-4 w-4" />
-            Quick Stats
-          </CardTitle>
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => toggleWidget("quickStats")}>
-            <EyeOff className="h-3 w-3 text-red-400" />
-          </Button>
-        </CardHeader>
-        <CardContent className="p-3 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Total Equipment</span>
-            <span className="text-sm font-medium">{equipment.length}</span>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Active Users</span>
-            <span className="text-sm font-medium">{users.length}</span>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Open Tickets</span>
-            <span className="text-sm font-medium text-orange-600">3</span>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Monthly Revenue</span>
-            <span className="text-sm font-medium text-green-600">$2,450</span>
-          </div>
-        </CardContent>
-      </Card>
-    );
-
-  const CustomerSummaryWidget = () =>
-    widgetVisibility.customerSummary && (
-      <Card className="mb-4">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <User className="h-4 w-4" />
-            Customer Summary
-          </CardTitle>
-          <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={() => toggleWidget("customerSummary")}>
-            <EyeOff className="h-3 w-3 text-red-400" />
-          </Button>
-        </CardHeader>
-        <CardContent className="p-3 space-y-3">
-          <div>
-            <p className="text-xs text-muted-foreground">Email</p>
-            <p className="text-xs font-medium">{customer?.email?.[0]}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Phone</p>
-            <p className="text-xs font-medium">{customer?.telephone}</p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Location</p>
-            <p className="text-xs font-medium">
-              {customer?.city}, {customer?.state}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Customer Since</p>
-            <p className="text-xs font-medium">Jan 2023</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar />
+  
 
       {/* Main Content */}
       <main
-        className={`flex-1 lg:ml-64 p-3 transition-all duration-300 ${isWidgetSectionVisible ? "lg:pr-[304px]" : ""}`}
+        className={`flex-1  p-3 transition-all duration-300 ${isWidgetSectionVisible ? "lg:pr-[304px]" : ""}`}
       >
         <div className="mx-auto">
           <div className="mb-6 mt-12 lg:mt-0">
@@ -499,80 +403,29 @@ export default function CustomerDetailPage({ customer }: { customer: Customer })
       </main>
 
       {/* Widget Section */}
-      {isWidgetSectionVisible && (
-        <div className="hidden lg:block fixed right-0 top-0 h-full w-72 bg-card border-l border-border">
-          <div className="p-4 h-full overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Widgets</h3>
-              <div className="flex items-center gap-2">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="ghost" size="sm">
-                      <Settings className="h-4 w-4" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-56">
-                    <div className="space-y-2">
-                      <h4 className="font-medium">Show/Hide Widgets</h4>
-                      <div className="space-y-2">
-                        {Object.entries(widgetVisibility).map(([key, visible]) => (
-                          <div key={key} className="flex items-center justify-between">
-                            <span className="text-sm capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-6 w-6 p-0"
-                              onClick={() => toggleWidget(key as keyof WidgetVisibility)}
-                            >
-                              {visible ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-                <Button variant="ghost" size="sm" onClick={toggleWidgetSection}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
+      <WidgetsPanel
+        customer={customer}
+        equipmentCount={equipment.length}
+        usersCount={users.length}
+        isVisible={isWidgetSectionVisible}
+        onToggleVisibility={toggleWidgetSection}
+        className="hidden lg:block"
+      />
 
-            <div className="space-y-4">
-              <CalendarWidget />
-              <QuickStatsWidget />
-              <CustomerSummaryWidget />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile Widget Button */}
-
-      <button className="lg:hidden fixed bottom-4 right-4 z-50 rounded-full h-8 w-8  " onClick={toggleWidgetSection}>
-        {isWidgetSectionVisible ? <PanelRightClose className="h-5 w-5" /> : <PanelRightOpen className="h-4 w-4" />}
-      </button>
       {/* Mobile Widget Overlay */}
       {isWidgetSectionVisible && (
         <div className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40">
-          <div className="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-card border-l border-border">
-            <div className="p-4 h-full overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Widgets</h3>
-                <Button variant="ghost" size="sm" onClick={toggleWidgetSection}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="space-y-4">
-                <CalendarWidget />
-                <QuickStatsWidget />
-                <CustomerSummaryWidget />
-              </div>
-            </div>
-          </div>
+          <WidgetsPanel
+            customer={customer}
+            equipmentCount={equipment.length}
+            usersCount={users.length}
+            isVisible={isWidgetSectionVisible}
+            onToggleVisibility={toggleWidgetSection}
+          />
         </div>
       )}
+
+      <MobileWidgetsButton isVisible={isWidgetSectionVisible} onClick={toggleWidgetSection} />
     </div>
   );
 }
