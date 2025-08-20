@@ -16,7 +16,6 @@ import {
   Menu,
   X,
   LogOut,
-
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -39,7 +38,7 @@ const navigation = [
   { name: "Documents", href: "/documents", icon: File },
 ];
 
-export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, setIsCollapsed: any }) {
+export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean; setIsCollapsed: any }) {
   const [isOpen, setIsOpen] = useState(false);
   // const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -119,9 +118,6 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, s
         </Button>
       </div>
 
-      {/* Desktop collapse button */}
-      
-
       {/* Sidebar */}
       <div
         className={cn(
@@ -132,8 +128,8 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, s
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className={cn("flex items-center justify-between h-16 px-4", isCollapsed && "flex-col justify-center")}>
-            <h1 className={cn("text-xl font-bold", isCollapsed ? "hidden" : "block")}>CMS</h1>
-            <div className="flex items-center gap-2">
+            <h1 className={cn("text-xl font-bold", isCollapsed ? "mt-16" : "block")}>CMS</h1>
+            <div className={cn("flex  items-center gap-2", isCollapsed ? "flex-col" : "flex-row")}>
               <ThemeToggle />
               {!isMobile && (
                 <Button
@@ -143,14 +139,14 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, s
                   className="h-8 w-8"
                   title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                 >
-                  {isCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+                  {isCollapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
                 </Button>
               )}
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+          <nav className={cn("flex-1 px-2 py-4 space-y-1 overflow-y-auto",isCollapsed?"mt-12":"mt-0")}>
             {navigation.map((item) => {
               const isActive = pathname.startsWith(item.href);
               return (
@@ -159,7 +155,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: {isCollapsed:boolean, s
                   href={item.href}
                   onClick={closeMobileSidebar}
                   className={cn(
-                    "flex items-center px-3 py-3 text-sm font-medium rounded-md transition-colors group",
+                    "flex items-center px-1 py-2 text-sm font-medium rounded-md transition-colors group",
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent",
