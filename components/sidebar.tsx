@@ -155,7 +155,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean;
                   href={item.href}
                   onClick={closeMobileSidebar}
                   className={cn(
-                    "flex items-center px-1 py-2 text-sm font-medium rounded-md transition-colors group",
+                    "flex items-center px-1 py-2 text-sm font-medium rounded-sm transition-colors group",
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent",
@@ -176,11 +176,11 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: { isCollapsed: boolean;
           </nav>
 
           {/* Logout button fixed at bottom */}
-          <div className={cn("p-4 border-t border-border", isCollapsed && "flex justify-center")}>
+          <div className={cn("", isCollapsed && "flex justify-center")}>
             <Button
               onClick={handleLogout}
               variant="destructive"
-              className={cn("w-full flex items-center justify-center gap-2", isCollapsed && "w-10 px-0")}
+              className={cn("w-full flex items-center justify-center gap-2 rounded-none", isCollapsed && "w-12 px-0 rounded-sm")}
               title={isCollapsed ? "Logout" : ""}
             >
               <LogOut className="h-4 w-4" />

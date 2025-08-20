@@ -9,7 +9,7 @@ export default function OrdersPage() {
     <div className="flex min-h-screen bg-background">
      
       
-      <main className="flex-1 lg:ml-64 p-4 lg:p-8">
+      <main className="flex-1  p-4 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 mt-12 lg:mt-0">
             <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
